@@ -74,19 +74,20 @@ void showStatics()
 
 int main( int argc, char* argv[] )
 {
+	t_continuum continuum;
 //	init_node();
 	unsigned node_num = sizeof(node_list)/sizeof(t_node_info);
-	ketama_create_continuum(node_list, node_num);
+	ketama_create_continuum(&continuum, node_list, node_num);
 
 	for ( int ii = 0; ii < 1000000; ii++ )
 	{
 		char key[20];
 		sprintf( key, "%d", ii );
-		t_mcs *server = ketama_get_node(key);
-		printf( "i:%d,data:%s,point:%u\n", ii, server->data, server->point );
-		//add2static(server->data);
+		t_mcs *server = ketama_get_node(&continuum, key);
+//		printf( "i:%d,data:%s,point:%u\n", ii, server->data, server->point );
+		add2static(server->data);
 	}
-	//showStatics();
+	showStatics();
 	return 0;
 }
 

@@ -13,13 +13,18 @@ typedef struct
 	char data[22];
 } t_mcs;
 
-t_mcs *tContinuum;
-static int total_counts = 0;
+typedef struct
+{
+	int numpoints;
+	t_mcs *array;
+}t_continuum;
+//t_mcs *tContinuum;
+//static int total_counts = 0;
 
-int ketama_create_continuum(const t_node_info *node_info, const unsigned node_num);
+int ketama_create_continuum(t_continuum* continuum, const t_node_info *node_info, const unsigned node_num);
 
 int ketama_compare( t_mcs *a, t_mcs *b );
 unsigned int ketama_hashi( char* inString );
-t_mcs* ketama_get_node( char* key);
+t_mcs* ketama_get_node( t_continuum* continuum, char* key);
 void ketama_md5(const char* in, unsigned char *digest);
 unsigned int ketama_hashi( char* inString );

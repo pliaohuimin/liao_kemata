@@ -5,15 +5,15 @@
 #include <string.h>
 #include "ketama.h"
 
-int ketama_create_continuum(const t_node_info *node_info, const unsigned node_num)
+int ketama_create_continuum(t_continuum *continuum, const t_node_info *node_info, const unsigned node_num)
 {
 	if ( node_info == NULL || node_num == 0 ) 
 	{
 		return 0;
 	}
 
-	total_counts = node_num*count_base;
-	t_mcs tmpContinuum[total_counts];
+	continuum->numpoints = node_num*count_base;
+	t_mcs tmpContinuum[continuum->numpoints];
 	int total_weight = 0;
 	unsigned cont = 0;
 	for ( unsigned ii = 0; ii < node_num; ii++ )
@@ -46,8 +46,8 @@ int ketama_create_continuum(const t_node_info *node_info, const unsigned node_nu
 
 	qsort( (void*) &tmpContinuum, cont, sizeof( t_mcs ), (compfn)ketama_compare );
 
-	tContinuum = malloc( sizeof( t_mcs )*node_num*count_base );
-	memcpy(tContinuum, &tmpContinuum, sizeof( t_mcs ) * total_counts );
+	continuum->array = malloc( sizeof( t_mcs )*continuum->numpoints );
+	memcpy(continuum->array, &tmpContinuum, sizeof( t_mcs ) * continuum->numpoints );
 	return 1;
 }
 
@@ -56,25 +56,26 @@ int ketama_compare( t_mcs *a, t_mcs *b )
 	return ( a->point < b->point ) ?  -1 : ( ( a->point > b->point ) ? 1 : 0 );
 }
 
-t_mcs* ketama_get_node( char* key)
+t_mcs* ketama_get_node( t_continuum *continuum, char* key)
 {
 	unsigned int h = ketama_hashi(key);
-	int highp = total_counts;
+	int highp = continuum->numpoints;
 	int lowp = 0, midp;
 	unsigned int midval, midval1;
+	t_mcs *array = continuum->array;
 
 	while ( 1 )
 	{
 		midp = (int)( ( lowp+highp ) / 2 );
 
-		if ( midp == total_counts )
-			return &( tContinuum[0] ); // if at the end, roll back to zeroth
+		if ( midp == continuum->numpoints )
+			return &( array[0] ); // if at the end, roll back to zeroth
 
-		midval = tContinuum[midp].point;
-		midval1 = midp == 0 ? 0 : tContinuum[midp-1].point;
+		midval = array[midp].point;
+		midval1 = midp == 0 ? 0 : array[midp-1].point;
 
 		if ( h <= midval && h > midval1 )
-			return &( tContinuum[midp] );
+			return &( array[midp] );
 
 		if ( midval < h )
 			lowp = midp + 1;
@@ -82,7 +83,7 @@ t_mcs* ketama_get_node( char* key)
 			highp = midp - 1;
 
 		if ( lowp > highp )
-			return &( tContinuum[0] );
+			return &( array[0] );
 	}
 }
 
