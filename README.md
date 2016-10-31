@@ -3,7 +3,6 @@ simplified version from rj_ketama
 
 ###test1###
 data:
-`
 t_node_info node_list[12] =
 {
     { "data1", 1 },
@@ -34,11 +33,10 @@ data10:83179
 data11:81272
 data12:74040
 all:1000000
-`
 
 ###test2###
 data:
-`
+```
 t_node_info node_list[11] =
 {
     { "data1", 1 },
@@ -69,4 +67,4 @@ data10:86918
 data11:89942
 data12:78180
 all:1000000
-`
+```
