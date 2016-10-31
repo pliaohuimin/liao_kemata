@@ -2,6 +2,7 @@
 simplified version from rj_ketama
 
 ###test1###
+```
 data:
 t_node_info node_list[12] =
 {
@@ -33,10 +34,11 @@ data10:83179
 data11:81272
 data12:74040
 all:1000000
+```
 
 ###test2###
-data:
 ```
+data:
 t_node_info node_list[11] =
 {
     { "data1", 1 },
